@@ -1,15 +1,16 @@
-import express from 'express';
+const express = require('express');
 import axios from 'axios';
 import crypto from 'crypto';
 import fs from 'fs';
 import cors from 'cors';
 
-import admin from 'firebase-admin';
-import Stripe from 'stripe';
+const admin = require('firebase-admin');
+const Stripe = require('stripe');
 import bodyParser from 'body-parser';
 
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
+
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
