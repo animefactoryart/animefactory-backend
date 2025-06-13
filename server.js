@@ -9,8 +9,13 @@ import admin from 'firebase-admin';
 import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 
-import dotenv from 'dotenv';
-dotenv.config();
+try {
+  const dotenv = await import('dotenv');
+  dotenv.config();
+} catch (err) {
+  console.warn('⚠️ dotenv not loaded. Using Render env vars only.');
+}
+console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing");
 
 
 
