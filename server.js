@@ -21,7 +21,7 @@ console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const serviceAccount = JSON.parse(fs.readFileSync('./serviceAccountKey.json', 'utf8'));
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 
 
