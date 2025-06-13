@@ -19,14 +19,14 @@ try {
 }
 console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing");
 
-import { readFile } from 'fs/promises';
 
-const raw = await readFile('./serviceAccountKey.json', 'utf-8');
+
 const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
+
 
 
 
