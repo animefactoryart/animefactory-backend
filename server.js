@@ -21,12 +21,28 @@ console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing
 
 
 
-const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+console.log("FIREBASE_CREDENTIALS ENV raw:", process.env.FIREBASE_CREDENTIALS);
+
+let serviceAccount;
+try {
+  serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+  console.log("✅ FIREBASE_CREDENTIALS parsed successfully");
+} catch (err) {
+  console.error("❌ Failed to parse FIREBASE_CREDENTIALS:", err.message);
+}
+
+if (!serviceAccount || !serviceAccount.private_key) {
+  throw new Error("❌ Missing or invalid Firebase credentials");
+}
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+admin.firestore().listCollections()
+  .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
+  .catch(err => console.error('❌ Firestore test failed:', err.message));
 
 
 
@@ -35,6 +51,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 
 
+console.error('❌ Firestore full error:', err);
 
 
 
@@ -261,6 +278,7 @@ app.post('/webhook', async (req, res) => {
   let event;
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+     console.log('✅ Stripe event parsed:', event.type);
   } catch (err) {
     console.error('❌ Webhook signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -271,6 +289,7 @@ app.post('/webhook', async (req, res) => {
 
     const firebaseUid = session.metadata.firebaseUid;
     const priceId = session.metadata.priceId;
+      console.log('✅ Stripe webhook event received for UID:', firebaseUid);
 
     const priceMap = {
       'price_1RZGxARrjDStXR6K6i5k60QI': { credits: 600, plan: 'pro' },
