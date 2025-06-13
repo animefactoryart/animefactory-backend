@@ -250,7 +250,7 @@ app.listen(port, () => {
 });
 app.post('/webhook', async (req, res) => {
   const sig = req.headers['stripe-signature'];
-  const endpointSecret = 'whsec_WTrCJULOtJRs6lx65RzWFjf6N9flZNmp'; // Your Stripe webhook secret
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   let event;
   try {
@@ -260,51 +260,45 @@ app.post('/webhook', async (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
- if (event.type === 'checkout.session.completed') {
-  const session = event.data.object;
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
 
-  const firebaseUid = session.metadata.firebaseUid;
-  const priceId = session.metadata.priceId;
+    const firebaseUid = session.metadata.firebaseUid;
+    const priceId = session.metadata.priceId;
 
-  // 🔁 Map Stripe Price IDs to credit amounts and plan names
-  const priceMap = {
-  // BASIC
-  'price_1RZGwdRrjDStXR6K7T9rtdjj': { credits: 300, plan: 'basic' }, // monthly
-  'price_1RZGwyRrjDStXR6KHUpo8Nah': { credits: 300, plan: 'basic' }, // yearly
+    const priceMap = {
+      'price_1RZGxARrjDStXR6K6i5k60QI': { credits: 600, plan: 'pro' },
+      'price_1RZGxRRrjDStXR6KXHjK7Ij1': { credits: 600, plan: 'pro' },
+      'price_1RZGxjRrjDStXR6KiolLjq55': { credits: 1000, plan: 'premium' },
+      'price_1RZGy3RrjDStXR6KHoPI9bZF': { credits: 1000, plan: 'premium' },
+      'price_1RZGwdRrjDStXR6K7T9rtdjj': { credits: 300, plan: 'basic' },
+      'price_1RZGwyRrjDStXR6KHUpo8Nah': { credits: 300, plan: 'basic' },
+    };
 
-  // PRO
-  'price_1RZGxARrjDStXR6K6i5k60QI': { credits: 600, plan: 'pro' }, // monthly
-  'price_1RZGxRRrjDStXR6KXHjK7Ij1': { credits: 600, plan: 'pro' }, // yearly
+    const mapping = priceMap[priceId];
 
-  // PREMIUM
-  'price_1RZGxjRrjDStXR6KiolLjq55': { credits: 1000, plan: 'premium' }, // monthly
-  'price_1RZGy3RrjDStXR6KHoPI9bZF': { credits: 1000, plan: 'premium' }, // yearly
-};
+    if (!mapping) {
+      console.warn('⚠️ Unknown price ID in webhook:', priceId);
+      return res.status(200).end();
+    }
 
+    const { credits, plan } = mapping;
 
-  const mapping = priceMap[priceId];
+    try {
+      const userRef = admin.firestore().collection('users').doc(firebaseUid);
+      await userRef.set({
+        credits,
+        plan,
+        lastRenewed: admin.firestore.FieldValue.serverTimestamp(),
+      }, { merge: true });
 
-  if (!mapping) {
-    console.warn('⚠️ Unknown price ID in webhook:', priceId);
-    return res.status(200).end(); // Don't fail webhook but skip update
+      console.log(`✅ Assigned ${credits} credits to ${firebaseUid} for ${plan} plan`);
+    } catch (err) {
+      console.error('❌ Firestore update error in webhook:', err.message);
+    }
   }
 
-  const { credits, plan } = mapping;
-
-  try {
-    const userRef = admin.firestore().collection('users').doc(firebaseUid);
-    await userRef.set({
-      credits,
-      plan,
-      lastRenewed: admin.firestore.FieldValue.serverTimestamp(),
-    }, { merge: true });
-
-    console.log(`✅ Assigned ${credits} credits to ${firebaseUid} for ${plan} plan`);
-  } catch (err) {
-    console.error('❌ Firestore update error in webhook:', err.message);
-  }
-
-  return res.status(200).end();
-}
-
+  res.status(200).end();
 });
+
+
