@@ -51,7 +51,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 
 
-console.error('❌ Firestore full error:', err);
+try {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+  console.log("✅ Firebase initialized");
+} catch (err) {
+  console.error("❌ Firestore full error:", err); // <== now 'err' is defined
+}
+
 
 
 
