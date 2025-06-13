@@ -9,6 +9,8 @@ import admin from 'firebase-admin';
 import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 
+
+
 try {
   const dotenv = await import('dotenv');
   dotenv.config();
@@ -235,6 +237,9 @@ app.get('/api/job/:jobId', async (req, res) => {
     console.error('Job fetch error:', err.response?.data || err.message);
     res.status(500).json({ error: 'Job status check failed' });
   }
+});
+app.get('/api/job/test', (req, res) => {
+  res.send("Backend is working!");
 });
 
 app.listen(port, () => {
