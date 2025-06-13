@@ -49,7 +49,8 @@ app.get('/membership', (req, res) => {
 });
 
 
-const privateKey = fs.readFileSync('private_key.pem', 'utf8');
+const privateKey = process.env.PRIVATE_RSA_KEY;
+
 const appId = 'rt5k-rdeV'; // replace with your real app ID
 
 import { getAuth } from 'firebase-admin/auth';
