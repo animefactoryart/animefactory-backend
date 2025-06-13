@@ -36,9 +36,7 @@ if (!serviceAccount || !serviceAccount.private_key) {
 }
 
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+
 
 admin.firestore().listCollections()
   .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
@@ -51,13 +49,11 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 
 
-try {
+if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
   console.log("✅ Firebase initialized");
-} catch (err) {
-  console.error("❌ Firestore full error:", err); // <== now 'err' is defined
 }
 
 
@@ -319,6 +315,7 @@ app.post('/webhook', async (req, res) => {
 
     try {
       const userRef = admin.firestore().collection('users').doc(firebaseUid);
+      console.log('🔥 Writing to Firestore:', { firebaseUid, credits, plan });
       await userRef.set({
         credits,
         plan,
