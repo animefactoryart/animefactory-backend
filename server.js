@@ -24,7 +24,9 @@ console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const serviceAccount = require('./serviceAccountKey.json');
+import serviceAccountRaw from './serviceAccountKey.json' assert { type: 'json' };
+const serviceAccount = serviceAccountRaw;
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
