@@ -34,18 +34,16 @@ try {
 if (!serviceAccount || !serviceAccount.private_key) {
   throw new Error("❌ Missing or invalid Firebase credentials");
 }
-admin.firestore().listCollections()
-  .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
-  .catch(err => console.error('❌ Firestore test failed:', err.message));
-
-
-
-
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
   console.log("✅ Firebase initialized");
+
+  // ✅ Firestore can only be used after Firebase is initialized
+  admin.firestore().listCollections()
+    .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
+    .catch(err => console.error('❌ Firestore test failed:', err.message));
 }
 
 
