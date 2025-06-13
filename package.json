@@ -1,6 +1,7 @@
 {
   "name": "ai-image-generator",
   "version": "1.0.0",
+"type": "module",
 
   "main": "index.js",
   "scripts": {
