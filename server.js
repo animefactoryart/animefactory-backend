@@ -98,12 +98,13 @@ app.post('/api/create-checkout-session', verifyFirebaseToken, async (req, res) =
 
 // Submit generation job
 app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
-  console.log(`Generating for UID: ${req.user.uid}`);
+  try {
+    console.log(`Generating for UID: ${req.user.uid}`);
 
-  const prompt = req.body.prompt + ", ,score_9,score_8, ,vivid colours, polished art, , source_anime, anime style, , official art,, best quality, masterpiece, , hi res, best_quality, very aesthetic, absurdres, 8k,";
-
-  const requestBody = {
-  request_id: Date.now().toString(),
+    const prompt = req.body.prompt + ", vivid colours, polished art, anime style, best quality, masterpiece, 8k";
+    
+    const requestBody = {
+      request_id: Date.now().toString(),
   stages: [
     {
       type: 'INPUT_INITIALIZE',
@@ -167,22 +168,20 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
   ]
 };
 
+    const method = 'POST';
+    const urlPath = '/v1/jobs';
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const nonce = crypto.randomBytes(16).toString('hex');
+    const bodyString = JSON.stringify(requestBody);
 
-  const method = 'POST';
-  const urlPath = '/v1/jobs';
-  const timestamp = Math.floor(Date.now() / 1000).toString();
-  const nonce = crypto.randomBytes(16).toString('hex');
-  const bodyString = JSON.stringify(requestBody);
+    const stringToSign = `${method}\n${urlPath}\n${timestamp}\n${nonce}\n${bodyString}`;
+    const signer = crypto.createSign('RSA-SHA256');
+    signer.update(stringToSign);
+    signer.end();
+    const signature = signer.sign(privateKey, 'base64');
 
-  const stringToSign = `${method}\n${urlPath}\n${timestamp}\n${nonce}\n${bodyString}`;
-  const signer = crypto.createSign('RSA-SHA256');
-  signer.update(stringToSign);
-  signer.end();
-  const signature = signer.sign(privateKey, 'base64');
+    const authHeader = `TAMS-SHA256-RSA app_id=${appId},nonce_str=${nonce},timestamp=${timestamp},signature=${signature}`;
 
-  const authHeader = `TAMS-SHA256-RSA app_id=${appId},nonce_str=${nonce},timestamp=${timestamp},signature=${signature}`;
-
-  try {
     const response = await axios.post(
       'https://ap-east-1.tensorart.cloud/v1/jobs',
       requestBody,
@@ -193,17 +192,15 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
         },
       }
     );
-    console.log('Job submission response:', response.data); // ✅ NOW it's valid
+
+    console.log('✅ Job submission response:', response.data);
     res.json({ jobId: response.data.job.id });
+
   } catch (err) {
-    console.error('Job submit error:', err.response?.data || err.message);
-    res.status(500).json({
-      error: 'Job submission failed',
-      details: err.response?.data || err.message
-    });
+    console.error("❌ Error in /api/generate:", err.response?.data || err.message);
+    res.status(500).json({ error: "Job submission failed" });
   }
 });
-
 
 // Check job status
 app.get('/api/job/:jobId', async (req, res) => {
