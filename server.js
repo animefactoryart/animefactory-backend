@@ -19,13 +19,20 @@ try {
 }
 console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing");
 
+import { readFile } from 'fs/promises';
+
+const raw = await readFile('./serviceAccountKey.json', 'utf-8');
+const serviceAccount = JSON.parse(raw);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-import serviceAccountRaw from './serviceAccountKey.json' assert { type: 'json' };
-const serviceAccount = serviceAccountRaw;
+
 
 
 admin.initializeApp({
