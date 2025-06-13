@@ -19,6 +19,7 @@ console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing
 
 
 
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
@@ -101,8 +102,8 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
   try {
     console.log(`Generating for UID: ${req.user.uid}`);
 
-    const prompt = req.body.prompt + ", vivid colours, polished art, anime style, best quality, masterpiece, 8k";
-    
+    const prompt = req.body.prompt + ", ,score_9,score_8,...";
+
     const requestBody = {
       request_id: Date.now().toString(),
   stages: [
