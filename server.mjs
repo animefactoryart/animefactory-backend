@@ -8,7 +8,10 @@ import admin from 'firebase-admin';
 import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 
-const stripe = new Stripe("sk_test_51RZGoKRrjDStXR6KvbhG0ckjfIDgXbBSJ5hOX6MjAm24n1va7ln1WrHEtWso94c8NNZUrY8mEUY83gH4HrBPlBXS00eRhZealY"); // Replace with your real secret key
+import dotenv from 'dotenv';
+dotenv.config();
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const serviceAccount = JSON.parse(fs.readFileSync('./serviceAccountKey.json', 'utf8'));
 
