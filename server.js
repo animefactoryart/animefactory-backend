@@ -268,10 +268,19 @@ app.post('/webhook', async (req, res) => {
 
   // 🔁 Map Stripe Price IDs to credit amounts and plan names
   const priceMap = {
-    'price_1RZGxARrjDStXR6K6i5k60QI': { credits: 600, plan: 'pro' },
-    'price_1ObKABC123xyzEXAMPLE1': { credits: 300, plan: 'basic' },
-    'price_1ObKXYZ789defEXAMPLE2': { credits: 1000, plan: 'premium' },
-  };
+  // BASIC
+  'price_1RZGwdRrjDStXR6K7T9rtdjj': { credits: 300, plan: 'basic' }, // monthly
+  'price_1RZGwyRrjDStXR6KHUpo8Nah': { credits: 300, plan: 'basic' }, // yearly
+
+  // PRO
+  'price_1RZGxARrjDStXR6K6i5k60QI': { credits: 600, plan: 'pro' }, // monthly
+  'price_1RZGxRRrjDStXR6KXHjK7Ij1': { credits: 600, plan: 'pro' }, // yearly
+
+  // PREMIUM
+  'price_1RZGxjRrjDStXR6KiolLjq55': { credits: 1000, plan: 'premium' }, // monthly
+  'price_1RZGy3RrjDStXR6KHoPI9bZF': { credits: 1000, plan: 'premium' }, // yearly
+};
+
 
   const mapping = priceMap[priceId];
 
