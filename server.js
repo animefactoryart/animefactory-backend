@@ -36,7 +36,12 @@ if (!serviceAccount || !serviceAccount.private_key) {
 }
 
 
-
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+  console.log("✅ Firebase initialized");
+}
 
 admin.firestore().listCollections()
   .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
@@ -49,12 +54,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-  console.log("✅ Firebase initialized");
-}
+
 
 
 
