@@ -9,9 +9,9 @@ import admin from 'firebase-admin';
 import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 
-// Top of server.js
-const { config } = await import('dotenv');
-config();
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
