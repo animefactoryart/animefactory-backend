@@ -49,18 +49,6 @@ if (!admin.apps.length) {
   }
 }
 
-
-
-if (!serviceAccount || !serviceAccount.private_key) {
-  throw new Error("❌ Missing or invalid Firebase credentials");
-}
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-  console.log("✅ Firebase initialized");
-}
-
 admin.firestore().listCollections()
   .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
   .catch(err => console.error('❌ Firestore write test failed:', err.message));
@@ -333,10 +321,11 @@ app.post('/webhook', async (req, res) => {
       const userRef = admin.firestore().collection('users').doc(firebaseUid);
       console.log('🔥 Writing to Firestore:', { firebaseUid, credits, plan });
       await userRef.set({
-        credits,
-        plan,
-        lastRenewed: admin.firestore.FieldValue.serverTimestamp(),
-      }, { merge: true });
+  credits: admin.firestore.FieldValue.increment(credits),
+  plan,
+  lastRenewed: admin.firestore.FieldValue.serverTimestamp(),
+}, { merge: true });
+
 
       console.log(`✅ Assigned ${credits} credits to ${firebaseUid} for ${plan} plan`);
     } catch (err) {
