@@ -302,7 +302,7 @@ app.post('/webhook', async (req, res) => {
     const priceMap = {
   // ✅ Premium
   'price_1RZtvKRrOO1Uoavp7QasGa57': { credits: 1000, plan: 'premium' }, // yearly
-  'price_1RZujWRrOO1UoavpSiCFi3te': { credits: 1000, plan: 'premium' }, // monthly
+  'price_1RZtv9RrOO1UoavpiaX9cymj': { credits: 1000, plan: 'premium' }, // monthly
 
   // ✅ Pro
   'price_1RZtuwRrOO1Uoavp2DRkvhXI': { credits: 600, plan: 'pro' },     // yearly
