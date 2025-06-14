@@ -73,8 +73,10 @@ app.use(
 
 app.use(express.json());
 app.use(cors({
-  origin: 'https://animefactory.art', // replace with your real domain
+  origin: 'https://animefactory.art',
+  credentials: true // optional but safe
 }));
+
 
 app.use(express.static('public'));
 
@@ -264,12 +266,26 @@ app.get('/api/job/:jobId', async (req, res) => {
         },
       }
     );
-    res.json(response.data);
+
+    // ✅ Explicitly set CORS header
+    res.setHeader('Access-Control-Allow-Origin', 'https://animefactory.art');
+
+    // ✅ Return only JSON-safe content
+    res.status(200).json({
+      job: response.data.job || null,
+      message: "Fetched job successfully"
+    });
   } catch (err) {
     console.error('Job fetch error:', err.response?.data || err.message);
-    res.status(500).json({ error: 'Job status check failed' });
+
+    res.setHeader('Access-Control-Allow-Origin', 'https://animefactory.art');
+    res.status(500).json({
+      error: 'Job status check failed',
+      details: err.response?.data || err.message
+    });
   }
 });
+
 
 
 app.listen(port, () => {
