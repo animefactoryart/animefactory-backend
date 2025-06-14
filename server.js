@@ -34,7 +34,7 @@ try {
 if (!serviceAccount || !serviceAccount.private_key) {
   throw new Error("❌ Missing or invalid Firebase credentials");
 }
-// ✅ Initialize Firebase FIRST
+// ✅ Initialize Firebase first
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -42,12 +42,10 @@ if (!admin.apps.length) {
   console.log("✅ Firebase initialized");
 }
 
-// ✅ Then test Firestore connection
+// ✅ THEN test Firestore (after initialization)
 admin.firestore().listCollections()
   .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
   .catch(err => console.error('❌ Firestore test failed:', err.message));
-
-
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
