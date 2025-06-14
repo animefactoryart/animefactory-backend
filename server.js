@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import cors from 'cors';
 
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 
