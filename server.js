@@ -310,7 +310,7 @@ app.post('/webhook', async (req, res) => {
 
   // ✅ Basic
   'price_1RZtuYRrOO1Uoavp4yvQ8HIW': { credits: 300, plan: 'basic' },   // yearly
-  'price_1RZHK6RrOO1UoavpOPoyOqOK': { credits: 300, plan: 'basic' },   // monthly
+  'price_1RZujWRrOO1UoavpSiCFi3te': { credits: 300, plan: 'basic' },   // monthly
 };
 
     const mapping = priceMap[priceId];
