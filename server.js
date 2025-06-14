@@ -5,11 +5,13 @@ import crypto from 'crypto';
 import fs from 'fs';
 import cors from 'cors';
 
-import admin from 'firebase-admin';
+const admin = require('firebase-admin');
 import Stripe from 'stripe';
 import bodyParser from 'body-parser';
 
-
+if (!process.env.FIREBASE_CREDENTIALS) {
+  throw new Error('Missing FIREBASE_CREDENTIALS env variable');
+}
 
 try {
   const dotenv = await import('dotenv');
@@ -18,9 +20,6 @@ try {
   console.warn('⚠️ dotenv not loaded. Using Render env vars only.');
 }
 console.log("✅ ENV test:", process.env.STRIPE_SECRET_KEY ? "Loaded" : "Missing");
-
-
-
 console.log("FIREBASE_CREDENTIALS ENV raw:", process.env.FIREBASE_CREDENTIALS);
 
 let serviceAccount;
@@ -29,7 +28,26 @@ try {
   console.log("✅ FIREBASE_CREDENTIALS parsed successfully");
 } catch (err) {
   console.error("❌ Failed to parse FIREBASE_CREDENTIALS:", err.message);
+  throw err;
 }
+
+if (!serviceAccount || !serviceAccount.private_key) {
+  throw new Error("❌ Missing or invalid Firebase credentials");
+}
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+  console.log("✅ Firebase initialized");
+
+  // Optional: Firestore test
+  admin.firestore().listCollections()
+    .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
+    .catch(err => console.error('❌ Firestore write test failed:', err.message));
+}
+
+
 
 if (!serviceAccount || !serviceAccount.private_key) {
   throw new Error("❌ Missing or invalid Firebase credentials");
