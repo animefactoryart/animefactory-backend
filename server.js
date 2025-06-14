@@ -300,13 +300,18 @@ app.post('/webhook', async (req, res) => {
       console.log('✅ Stripe webhook event received for UID:', firebaseUid);
 
     const priceMap = {
-      'price_1RZGxARrjDStXR6K6i5k60QI': { credits: 600, plan: 'pro' },
-      'price_1RZGxRRrjDStXR6KXHjK7Ij1': { credits: 600, plan: 'pro' },
-      'price_1RZGxjRrjDStXR6KiolLjq55': { credits: 1000, plan: 'premium' },
-      'price_1RZGy3RrjDStXR6KHoPI9bZF': { credits: 1000, plan: 'premium' },
-      'price_1RZGwdRrjDStXR6K7T9rtdjj': { credits: 300, plan: 'basic' },
-      'price_1RZGwyRrjDStXR6KHUpo8Nah': { credits: 300, plan: 'basic' },
-    };
+  // ✅ Premium
+  'price_1RZtvKRrOO1Uoavp7QasGa57': { credits: 1000, plan: 'premium' }, // yearly
+  'price_1RZtv9RrOO1UoavpiaX9cymj': { credits: 1000, plan: 'premium' }, // monthly
+
+  // ✅ Pro
+  'price_1RZtuwRrOO1Uoavp2DRkvhXI': { credits: 600, plan: 'pro' },     // yearly
+  'price_1RZtukRrOO1Uoavp9TTgzGLU': { credits: 600, plan: 'pro' },     // monthly
+
+  // ✅ Basic
+  'price_1RZtuYRrOO1Uoavp4yvQ8HIW': { credits: 300, plan: 'basic' },   // yearly
+  'price_1RZHK6RrOO1UoavpOPoyOqOK': { credits: 300, plan: 'basic' },   // monthly
+};
 
     const mapping = priceMap[priceId];
 
