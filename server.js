@@ -235,9 +235,7 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
     res.status(500).json({ error: "Job submission failed" });
   }
 });
-app.get('/api/job/test', (req, res) => {
-  res.send("✅ Backend is working!");
-});
+
 
 // Check job status
 app.get('/api/job/:jobId', async (req, res) => {
@@ -272,9 +270,7 @@ app.get('/api/job/:jobId', async (req, res) => {
     res.status(500).json({ error: 'Job status check failed' });
   }
 });
-app.get('/api/job/test', (req, res) => {
-  res.send("Backend is working!");
-});
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
