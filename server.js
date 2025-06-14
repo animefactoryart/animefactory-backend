@@ -302,7 +302,7 @@ app.post('/webhook', async (req, res) => {
     const priceMap = {
   // ✅ Premium
   'price_1RZtvKRrOO1Uoavp7QasGa57': { credits: 1000, plan: 'premium' }, // yearly
-  'price_1RZtv9RrOO1UoavpiaX9cymj': { credits: 1000, plan: 'premium' }, // monthly
+  'price_1RZujWRrOO1UoavpSiCFi3te': { credits: 1000, plan: 'premium' }, // monthly
 
   // ✅ Pro
   'price_1RZtuwRrOO1Uoavp2DRkvhXI': { credits: 600, plan: 'pro' },     // yearly
@@ -310,7 +310,7 @@ app.post('/webhook', async (req, res) => {
 
   // ✅ Basic
   'price_1RZtuYRrOO1Uoavp4yvQ8HIW': { credits: 300, plan: 'basic' },   // yearly
-  'price_1RZujWRrOO1UoavpSiCFi3te': { credits: 300, plan: 'basic' },   // monthly
+  'price_1RZHK6RrOO1UoavpOPoyOqOK': { credits: 300, plan: 'basic' },   // monthly
 };
 
     const mapping = priceMap[priceId];
