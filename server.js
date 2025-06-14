@@ -39,13 +39,13 @@ if (!admin.apps.length) {
     credential: admin.credential.cert(serviceAccount),
   });
   console.log("✅ Firebase initialized");
+}
 
-  // ✅ Move Firestore test HERE
-  admin.firestore().doc('test/connection').set({ ok: true }, { merge: true })
-  .then(() => console.log('✅ Firestore write test succeeded'))
+// ✅ Move Firestore test HERE
+admin.firestore().listCollections()
+  .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
   .catch(err => console.error('❌ Firestore write test failed:', err.message));
 
-}
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
