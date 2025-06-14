@@ -41,10 +41,12 @@ if (!admin.apps.length) {
   });
   console.log("✅ Firebase initialized");
 
-  // Optional: Firestore test
-  admin.firestore().listCollections()
-    .then(colls => console.log('✅ Firestore connected, collections:', colls.map(c => c.id)))
-    .catch(err => console.error('❌ Firestore write test failed:', err.message));
+  try {
+    await admin.firestore().collection('test').doc('ping').set({ ok: true });
+    console.log('✅ Test write to Firestore succeeded');
+  } catch (err) {
+    console.error('❌ Firestore write failed:', err.message);
+  }
 }
 
 
