@@ -157,7 +157,7 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
         prompts: [{ text: prompt }],
         negativePrompts: [
           {
-            text: "monochrome, greyscale, large_areolas, big_areolae, (deformed, distorted, disfigured:1.4), (mutated hands and fingers:1.4), score_5, score_4, , text, censored, deformed, bad hand, blurry, (watermark), extra hands,kid ,earrings, chin sweat, ribs, skinny, petite , bod, fat bbw, curvy ,3d, , flowers in hair, real life, realistic,  4K, 8k, high_resolution, ,,shading, professional lighting, volumetric lighting, detailed"
+            text: ",monochrome, greyscale, (deformed, distorted, disfigured:1.4), (mutated hands and fingers:1.4), score_5, score_4, , text, censored, deformed, bad hand, blurry, (watermark), extra hands,kid ,earrings, chin sweat, ribs, skinny, petite , bod, fat bbw, curvy ,3d, , flowers in hair, real life, realistic,  4K, 8k, high_resolution, ,,shading, professional lighting, volumetric lighting, detailed"
           },
         ],
         steps: 20,
