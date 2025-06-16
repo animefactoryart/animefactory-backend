@@ -269,7 +269,11 @@ app.get('/api/job/:jobId', async (req, res) => {
     );
 
     // ✅ Explicitly set CORS header
-    res.setHeader('Access-Control-Allow-Origin', 'https://getani.net');
+    const origin = req.headers.origin;
+if (origin === 'https://getani.net' || origin === 'https://www.getani.net') {
+  res.setHeader('Access-Control-Allow-Origin', origin);
+}
+
 
     // ✅ Return only JSON-safe content
     res.status(200).json({
@@ -279,7 +283,7 @@ app.get('/api/job/:jobId', async (req, res) => {
   } catch (err) {
     console.error('Job fetch error:', err.response?.data || err.message);
 
-    res.setHeader('Access-Control-Allow-Origin', 'https://getani.net');
+    
     res.status(500).json({
       error: 'Job status check failed',
       details: err.response?.data || err.message
