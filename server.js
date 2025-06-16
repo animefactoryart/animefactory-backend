@@ -73,9 +73,10 @@ app.use(
 
 app.use(express.json());
 app.use(cors({
-  origin: 'https://animefactory.art',
-  credentials: true // optional but safe
+  origin: ['https://getani.net', 'https://www.getani.net'],
+  credentials: true
 }));
+
 
 
 app.use(express.static('public'));
@@ -117,8 +118,8 @@ app.post('/api/create-checkout-session', verifyFirebaseToken, async (req, res) =
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: 'https://animefactory.art/success',
-      cancel_url: 'https://animefactory.art/cancel',
+      success_url: 'https://getani.net/success',
+      cancel_url: 'https://getani.net/cancel',
       metadata: {
         firebaseUid,
         priceId,
@@ -268,7 +269,7 @@ app.get('/api/job/:jobId', async (req, res) => {
     );
 
     // ✅ Explicitly set CORS header
-    res.setHeader('Access-Control-Allow-Origin', 'https://animefactory.art');
+    res.setHeader('Access-Control-Allow-Origin', 'https://getani.net');
 
     // ✅ Return only JSON-safe content
     res.status(200).json({
@@ -278,7 +279,7 @@ app.get('/api/job/:jobId', async (req, res) => {
   } catch (err) {
     console.error('Job fetch error:', err.response?.data || err.message);
 
-    res.setHeader('Access-Control-Allow-Origin', 'https://animefactory.art');
+    res.setHeader('Access-Control-Allow-Origin', 'https://getani.net');
     res.status(500).json({
       error: 'Job status check failed',
       details: err.response?.data || err.message
