@@ -102,7 +102,10 @@ async function verifyFirebaseToken(req, res, next) {
   const idToken = authHeader.split('Bearer ')[1];
 
   try {
+    
+    console.time("⏱️ verifyIdToken");
     const decodedToken = await getAuth().verifyIdToken(idToken);
+    console.timeEnd("⏱️ verifyIdToken");
     req.user = decodedToken; // Optional: access uid/email later
     next(); // Go to the route
   } catch (error) {
@@ -115,6 +118,7 @@ app.post('/api/create-checkout-session', verifyFirebaseToken, async (req, res) =
   const firebaseUid = req.user.uid;
 
   try {
+    console.time("Stripe session creation");
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
@@ -125,7 +129,7 @@ app.post('/api/create-checkout-session', verifyFirebaseToken, async (req, res) =
         priceId,
       },
     });
-
+    console.timeEnd("Stripe session creation");
     res.json({ url: session.url });
   } catch (err) {
     console.error('❌ Stripe checkout session error:', err.message);
