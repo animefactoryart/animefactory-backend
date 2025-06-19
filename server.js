@@ -162,20 +162,19 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
         prompts: [{ text: prompt }],
         negativePrompts: [
           {
-            text: ",monochrome, greyscale, large_areolas, big_areolae, (deformed, distorted, disfigured:1.4), (mutated hands and fingers:1.4), score_5, score_4, , text, censored, deformed, bad hand, blurry, (watermark), extra hands,kid ,earrings, chin sweat, ribs, skinny, petite , bod, fat bbw, curvy ,3d, , flowers in hair, real life, realistic,  4K, 8k, high_resolution, ,,shading, professional lighting, volumetric lighting, detailed"
+            text: "bad-hands-5, badhandv4, asian, large_areolas, big_areolae, (deformed, distorted, disfigured:1.4), (mutated hands and fingers:1.4), score_5, score_4, worst quality, low quality, text, censored, deformed, bad hand, blurry, (watermark), extra hands, flat chest, navel piercing, necklace clip, jewelry, dimples of venus, tattoo, bbw,3d, , flowers in hair, avoiding overly smooth or plastic-like skin, unnatural colors, exaggerated pores, excessive blemishes, unrealistic shine, harsh shadows, overexposed highlights, lack of texture, and distorted features. Exclude cartoonish elements, overly airbrushed effects, artificial lighting, extreme imperfections, low resolution, and lack of detail, blurry, low resolution,"
           },
         ],
         steps: 20,
-        sd_model: '840915259221871955',
+        sd_model: '784874470109107047',
         clip_skip: 2,
-        cfg_scale: 6,
-        sampler: 'Euler a',
+        cfg_scale: 4,
+        sampler: 'DPM++ SDE',
         embedding: {},
         lora: {
           items: [
-            { loraModel: "746566089133031686", weight: 0.8 },
-            { loraModel: "801237307664398868", weight: 0.5 },
-            { loraModel: "766132482665064102", weight: 0.2 },
+            { loraModel: "838423529650268220", weight: 0.5 },
+          
             { loraModel: "710266515901029566", weight: -1 }
           ]
         }
@@ -189,10 +188,10 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
             adModel: "face_yolov8s.pt",
             adPrompt: [{ text: "" }],
             adNegativePrompt: [{ text: "" }],
-            adConfidence: 0.7,
+            adConfidence: 0.8,
             adDilateErode: 2,
             adMaskMergeInvert: "None",
-            adDenoisingStrength: 0.27,
+            adDenoisingStrength: 0.4,
             adInpaintOnlyMasked: true,
             adInpaintOnlyMaskedPadding: 32,
             adUseInpaintWidthHeight: false,
