@@ -242,6 +242,9 @@ app.post('/api/generate', verifyFirebaseToken, async (req, res) => {
   }
 });
 
+app.get('/ping', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
 // Check job status
 app.get('/api/job/:jobId', async (req, res) => {
